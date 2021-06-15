@@ -1,0 +1,7 @@
+program p;
+var x@: integer;
+begin
+	x:=1;
+	while (x<3) {teste @@_@@  if} do 
+		x:=y+1;
+end .

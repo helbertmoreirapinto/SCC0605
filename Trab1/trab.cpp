@@ -95,7 +95,7 @@ int autoComment(char* str, int i) {
         // poderia ser impresso, mas uma função do léxico é ignorar comentários cout << chain << ", comment" << endl;
         i++;
     } else
-        cout << "ERRO! Comentario mal formado" << endl;
+        cout << "ERRO! Comentario mal formado" << endl; //caso o comentário não seja encerrado na mesma linha
     return i;
 }
 

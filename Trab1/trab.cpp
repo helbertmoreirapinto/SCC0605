@@ -118,8 +118,8 @@ int main() {
     words["do"] = "simb_do";
     words["for"] = "simb_for";
     words["to"] = "simb_to";
-    words["{"] = "simb_inicio_chave";
-    words["}"] = "simb_fim_chave";
+    //words["{"] = "simb_inicio_chave";
+    //words["}"] = "simb_fim_chave";
     words[":="] = "simb_atrib";
     words["<>"] = "simb_diff";
     words[">="] = "simb_maior_igual";

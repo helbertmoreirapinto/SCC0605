@@ -92,7 +92,7 @@ int autoComment(char* str, int i) {
 
     if (str[i] == '}') {
         chain.push_back(str[i]);
-        cout << chain << ", comment" << endl;
+        // poderia ser impresso, mas uma função do léxico é ignorar comentários cout << chain << ", comment" << endl;
         i++;
     } else
         cout << "ERRO! Comentario mal formado" << endl;

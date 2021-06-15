@@ -1,0 +1,24 @@
+program, simb_program
+pe, ident
+var, simb_var
+x, ident
+:, simb_dp
+integer, simb_tipo_int
+begin, simb_begin
+x, ident
+=, simb_igual
+1.a, ERRO! ("Numero real mal formado")
+54, integer_number
+axde, ident
+while, simb_while
+(, simb_abrir_parentese
+gabriel, ident
+<, simb_menor
+3, integer_number
+do, simb_do
+x, ident
+=, simb_igual
+y, ident
+1, integer_number
+end, simb_end
+., simb_dot

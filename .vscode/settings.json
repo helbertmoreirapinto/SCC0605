@@ -9,6 +9,7 @@
         "xstring": "cpp",
         "xtree": "cpp",
         "ostream": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "iosfwd": "cpp"
     }
 }

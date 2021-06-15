@@ -9,97 +9,127 @@
 
 using namespace std;
 
-bool isNumber(char ch) {
+bool isNumber(char ch)
+{
     return ch >= '0' && ch <= '9';
 }
 
-bool isChar(char ch) {
+bool isChar(char ch)
+{
     return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
 }
 
-bool isSymbol(char ch, map<string, string> words) {
+bool isSymbol(char ch, map<string, string> symbols, ofstream &fileOut)
+{
     string chain = {ch};
-    string x = words[chain];
-    if (!x.empty()) {
-        cout << chain << ", " << words[chain] << endl;
+    string x = symbols[chain];
+    if (!x.empty())
+    {
+        fileOut << chain << ", " << symbols[chain] << endl;
         return true;
     }
     return false;
 }
 
-int autoNumber(char* str, int i) {
+int autoNumber(char *str, int i, ofstream &fileOut)
+{
     string number;
     while (isNumber(str[i]))
         number.push_back(str[i++]);
 
-    if (str[i] == '.') {
+    if (str[i] == '.')
+    {
         number.push_back(str[i++]);
-        while (isNumber(str[i])) number.push_back(str[i++]);
-        cout << number << ", real_number\n";
-    } else
-        cout << number << ", integer_number\n";
-
-    i--;
-
-    return i;
-}
-
-int autoString(char* str, int i, map<string, string> words) {
-    string chain;
-    while (isChar(str[i]) || isNumber(str[i])) chain.push_back(str[i++]);
-    if (!words[chain].empty())
-        cout << chain << ", " << words[chain] << endl;
+        // ja sei o q fazer
+        if (!isNumber(str[i]))
+        {
+            number.push_back(str[i]);
+            fileOut << number << ", ERRO! (\"Numero real mal formado\")" << endl;
+            return i++;
+        }
+        while (isNumber(str[i]))
+            number.push_back(str[i++]);
+        fileOut << number << ", real_number\n";
+    }
     else
-        cout << chain << ", ident" << endl;
-    i--;
+        fileOut << number << ", integer_number\n";
 
-    return i;
+    return i--;
 }
 
-int autoGreater(char* str, int i) {
-    if (str[i + 1] == '=') {
-        cout << ">=, simb_maior_igual" << endl;
-        i++;
-    } else
-        cout << ">, simb_maior" << endl;
-    return i;
-}
-
-int autoLesser(char* str, int i) {
-    if (str[i + 1] == '=') {
-        cout << "<=, simb_menor_igual" << endl;
-        i++;
-    } else if (str[i + 1] == '>') {
-        cout << "<>, simb_diff" << endl;
-        i++;
-    } else
-        cout << "<, simb_menor" << endl;
-    return i;
-}
-
-int autoColon(char* str, int i) {
-    if (str[i + 1] == '=') {
-        cout << ":=, simb_atrib" << endl;
-        i++;
-    } else
-        cout << ":, simb_dp" << endl;
-    return i;
-}
-
-int autoComment(char* str, int i) {
+int autoString(char *str, int i, map<string, string> words, ofstream &fileOut)
+{
     string chain;
-    while (str[i] != '\n' && str[i] != '}') chain.push_back(str[i++]);
+    while (isChar(str[i]) || isNumber(str[i]))
+        chain.push_back(str[i++]);
+    if (!words[chain].empty())
+        fileOut << chain << ", " << words[chain] << endl;
+    else
+        fileOut << chain << ", ident" << endl;
 
-    if (str[i] == '}') {
-        chain.push_back(str[i]);
-        // poderia ser impresso, mas uma função do léxico é ignorar comentários cout << chain << ", comment" << endl;
+    return i--;
+}
+
+int autoGreater(char *str, int i, ofstream &fileOut)
+{
+    if (str[i + 1] == '=')
+    {
+        fileOut << ">=, simb_maior_igual" << endl;
         i++;
-    } else
-        cout << "ERRO! Comentario mal formado" << endl; //caso o comentário não seja encerrado na mesma linha
+    }
+    else
+        fileOut << ">, simb_maior" << endl;
     return i;
 }
 
-int main() {
+int autoLesser(char *str, int i, ofstream &fileOut)
+{
+    if (str[i + 1] == '=')
+    {
+        fileOut << "<=, simb_menor_igual" << endl;
+        i++;
+    }
+    else if (str[i + 1] == '>')
+    {
+        fileOut << "<>, simb_diff" << endl;
+        i++;
+    }
+    else
+        fileOut << "<, simb_menor" << endl;
+    return i;
+}
+
+int autoColon(char *str, int i, ofstream &fileOut)
+{
+    if (str[i + 1] == '=')
+    {
+        fileOut << ":=, simb_atrib" << endl;
+        i++;
+    }
+    else
+        fileOut << ":, simb_dp" << endl;
+    return i;
+}
+
+int autoComment(char *str, int i, ofstream &fileOut)
+{
+    string chain;
+    while (str[i] != '\n' && str[i] != '}')
+        chain.push_back(str[i++]);
+
+    if (str[i] == '}')
+    {
+        chain.push_back(str[i]);
+        // poderia ser impresso, mas uma função do léxico é ignorar comentários fileOut << chain << ", comment" << endl;
+        i++;
+    }
+    else
+        fileOut << chain << ", ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
+    return i;
+}
+
+int main()
+{
     map<string, string> words;
     words["program"] = "simb_program";
     words["begin"] = "simb_begin";
@@ -120,24 +150,26 @@ int main() {
     words["to"] = "simb_to";
     //words["{"] = "simb_inicio_chave";
     //words["}"] = "simb_fim_chave";
-    words[":="] = "simb_atrib";
-    words["<>"] = "simb_diff";
-    words[">="] = "simb_maior_igual";
-    words["<="] = "simb_menor_igual";
-    words["<"] = "simb_menor";
-    words[">"] = "simb_maior";
-    words["="] = "simb_igual";
-    words[":"] = "simb_dp";
-    words[";"] = "simb_pv";
-    words["."] = "simb_dot";
-    words["+"] = "simb_soma";
-    words["-"] = "simb_sub";
-    words["/"] = "simb_div";
-    words["*"] = "simb_mul";
-    words["("] = "simb_abrir_parentese";
-    words[")"] = "simb_fechar_parentese";
 
-    map<string, string> identifier;
+    map<string, string> symbols;
+    symbols[":="] = "simb_atrib";
+    symbols["<>"] = "simb_diff";
+    symbols[">="] = "simb_maior_igual";
+    symbols["<="] = "simb_menor_igual";
+    symbols["<"] = "simb_menor";
+    symbols[">"] = "simb_maior";
+    symbols["="] = "simb_igual";
+    symbols[":"] = "simb_dp";
+    symbols[";"] = "simb_pv";
+    symbols["."] = "simb_dot";
+    symbols["+"] = "simb_soma";
+    symbols["-"] = "simb_sub";
+    symbols["/"] = "simb_div";
+    symbols["*"] = "simb_mul";
+    symbols["("] = "simb_abrir_parentese";
+    symbols[")"] = "simb_fechar_parentese";
+
+    //map<string, string> identifier;
 
     string fileName;
     cin >> fileName;
@@ -149,41 +181,49 @@ int main() {
     fileNameOut.append(".out");
 
     // open files
-    FILE* fileIn = fopen(fileNameIn.c_str(), "r");
-    FILE* fileOut = fopen(fileNameOut.c_str(), "w");
 
-    if (!fileIn || !fileOut) {
+    ifstream fileIn;
+    ofstream fileOut;
+
+    fileIn.open("1.in");
+    fileOut.open("1.out");
+
+    if (!fileIn || !fileOut)
+    {
         cout << "file not found!\n";
         return 0;
     }
 
     char str[MAX_LINE];
-    while (fgets(str, MAX_LINE, fileIn) != NULL) {
-        for (int i = 0; i < (int)strlen(str); i++) {
+    //fgets(str, MAX_LINE, fileIn) != NULL)
+    while (fileIn.getline(str, MAX_LINE))
+    {
+        for (int i = 0; i < (int)strlen(str); i++)
+        {
             if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == 13 || !str[i])
                 continue;
 
             if (isNumber(str[i]))
-                i = autoNumber(str, i);
+                i = autoNumber(str, i, fileOut);
             else if (isChar(str[i]))
-                i = autoString(str, i, words);
+                i = autoString(str, i, words, fileOut);
             else if (str[i] == '>')
-                i = autoGreater(str, i);
+                i = autoGreater(str, i, fileOut);
             else if (str[i] == '<')
-                i = autoLesser(str, i);
+                i = autoLesser(str, i, fileOut);
             else if (str[i] == '{')
-                i = autoComment(str, i);
+                i = autoComment(str, i, fileOut);
             else if (str[i] == ':')
-                i = autoColon(str, i++);
-            else if (isSymbol(str[i], words))
-                i++;
+                i = autoColon(str, i++, fileOut);
+            else if (isSymbol(str[i], symbols, fileOut))
+                continue;
             else
-                cout << str[i] << ", ERRO! Caractere não permitido" << endl;
+                fileOut << str[i] << ", ERRO! (\"Caractere não permitido\")" << endl;
         }
     }
 
-    fclose(fileIn);
-    fclose(fileOut);
+    fileIn.close();
+    fileOut.close();
 
     return 0;
 }

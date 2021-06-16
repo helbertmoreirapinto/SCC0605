@@ -120,7 +120,7 @@ int autoColon(char *str, int i, ofstream &fileOut)
 int autoComment(char *str, int i, ofstream &fileOut)
 {
     string chain;
-    while (str[i] != '\n' && str[i] != '}')
+    while (str[i] != '\n' && str[i] != '}' && str[i] != '\0')
         chain.push_back(str[i++]);
 
     if (str[i] == '}')
@@ -130,7 +130,7 @@ int autoComment(char *str, int i, ofstream &fileOut)
         i++;
     }
     else
-        fileOut << "ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
+        fileOut << chain << " << ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
     return i;
 }
 
@@ -181,8 +181,8 @@ int main()
     string fileNameIn = fileName;
     string fileNameOut = fileName;
 
-    fileNameIn.append(".in");
-    fileNameOut.append(".out");
+    fileNameIn.append(".txt");
+    fileNameOut.append("_out.txt");
 
     // open files
 
@@ -221,6 +221,8 @@ int main()
                 fileOut << str[i] << ", ERRO! (\"Caractere não permitido\")" << endl;
         }
     }
+
+    cout << "Arquivo " << fileNameOut << " gerado com sucesso!" << endl;
 
     fileIn.close();
     fileOut.close();

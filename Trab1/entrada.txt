@@ -1,0 +1,7 @@
+program pe;
+var x@: integer;
+begin
+	x:=1.54; {comentario mal formado
+	while (x<2) {teste @@_@@  if} do 
+		x:=y+1;
+end .

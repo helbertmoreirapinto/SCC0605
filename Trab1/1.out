@@ -1,24 +1,16 @@
 program, simb_program
 pe, ident
+;, simb_pv
 var, simb_var
 x, ident
+@, ERRO! ("Caractere não permitido")
 :, simb_dp
 integer, simb_tipo_int
+;, simb_pv
 begin, simb_begin
 x, ident
-=, simb_igual
-1.a, ERRO! ("Numero real mal formado")
-54, integer_number
+:=, simb_atrib
+1.54, real_number
+;, simb_pv
+32, integer_number
 axde, ident
-while, simb_while
-(, simb_abrir_parentese
-gabriel, ident
-<, simb_menor
-3, integer_number
-do, simb_do
-x, ident
-=, simb_igual
-y, ident
-1, integer_number
-end, simb_end
-., simb_dot

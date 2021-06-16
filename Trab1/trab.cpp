@@ -37,24 +37,29 @@ int autoNumber(char *str, int i, ofstream &fileOut)
     while (isNumber(str[i]))
         number.push_back(str[i++]);
 
+    // str[i] n eh mais um number
+
     if (str[i] == '.')
     {
         number.push_back(str[i++]);
-        // ja sei o q fazer
         if (!isNumber(str[i]))
         {
             number.push_back(str[i]);
             fileOut << number << ", ERRO! (\"Numero real mal formado\")" << endl;
-            return i++;
+            i++;
+            return i;
         }
         while (isNumber(str[i]))
             number.push_back(str[i++]);
+        // str[i] n eh mais um number
         fileOut << number << ", real_number\n";
     }
     else
+    {
         fileOut << number << ", integer_number\n";
-
-    return i--;
+    }
+    i--;
+    return i;
 }
 
 int autoString(char *str, int i, map<string, string> words, ofstream &fileOut)
@@ -67,7 +72,8 @@ int autoString(char *str, int i, map<string, string> words, ofstream &fileOut)
     else
         fileOut << chain << ", ident" << endl;
 
-    return i--;
+    i--;
+    return i;
 }
 
 int autoGreater(char *str, int i, ofstream &fileOut)
@@ -124,7 +130,7 @@ int autoComment(char *str, int i, ofstream &fileOut)
         i++;
     }
     else
-        fileOut << chain << ", ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
+        fileOut << "ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
     return i;
 }
 
@@ -169,8 +175,6 @@ int main()
     symbols["("] = "simb_abrir_parentese";
     symbols[")"] = "simb_fechar_parentese";
 
-    //map<string, string> identifier;
-
     string fileName;
     cin >> fileName;
 
@@ -182,11 +186,8 @@ int main()
 
     // open files
 
-    ifstream fileIn;
-    ofstream fileOut;
-
-    fileIn.open("1.in");
-    fileOut.open("1.out");
+    ifstream fileIn(fileNameIn);
+    ofstream fileOut(fileNameOut);
 
     if (!fileIn || !fileOut)
     {
@@ -195,7 +196,6 @@ int main()
     }
 
     char str[MAX_LINE];
-    //fgets(str, MAX_LINE, fileIn) != NULL)
     while (fileIn.getline(str, MAX_LINE))
     {
         for (int i = 0; i < (int)strlen(str); i++)

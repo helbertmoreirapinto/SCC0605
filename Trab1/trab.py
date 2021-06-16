@@ -70,7 +70,7 @@ def lexicalAutomate(stream):
         i += 1
         return isSimbol(stream[i - 1])
     i += 1
-    return (stream[i-1], 'Caractere não permitido')
+    return (stream[i-1], 'Caractere nao permitido')
 
 
 def numberAutomate(stream):

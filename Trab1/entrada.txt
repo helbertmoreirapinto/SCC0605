@@ -1,7 +1,12 @@
-program pe;
-var x@: integer;
+program fatorial;
+{exemplo 1}
+var x, aux, fat: integer;
 begin
-	x:=1.54; {comentario mal formado
-	while (x<2) {teste @@_@@  if} do 
-		x:=y+1;
-end .
+read(x);
+fat:=1;
+for aux:=1 to x do
+begin
+fat:=fat*aux;
+end;
+write(fat);
+end.

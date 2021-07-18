@@ -1,3 +1,11 @@
+/*
+SCC0605 - Teoria da Computação e Compiladores
+Antônio Sebastian - 10797781
+Bruno Lanzoni Rossi - 4309596
+Gabriell Tavares Luna - 10716400
+Helbert Moreira Pinto - 10716504
+*/
+
 #include <string.h>
 
 #include <fstream>

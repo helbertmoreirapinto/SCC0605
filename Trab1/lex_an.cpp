@@ -173,6 +173,7 @@ int main()
     symbols["<"] = "simb_menor";
     symbols[">"] = "simb_maior";
     symbols["="] = "simb_igual";
+    symbols[","] = "simb_virgula";
     symbols[":"] = "simb_dp";
     symbols[";"] = "simb_pv";
     symbols["."] = "simb_dot";

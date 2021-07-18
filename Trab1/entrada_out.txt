@@ -3,9 +3,9 @@ fatorial, ident
 ;, simb_pv
 var, simb_var
 x, ident
-,, ERRO! ("Caractere não permitido")
+,, simb_virgula
 aux, ident
-,, ERRO! ("Caractere não permitido")
+,, simb_virgula
 fat, ident
 :, simb_dp
 integer, simb_tipo_int

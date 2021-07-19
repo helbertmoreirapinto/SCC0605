@@ -1,4 +1,7 @@
 program, simb_program
+p, ident
+;, simb_pv
+program, simb_program
 pe, ident
 ;, simb_pv
 var, simb_var
@@ -10,16 +13,24 @@ integer, simb_tipo_int
 begin, simb_begin
 x, ident
 :=, simb_atrib
-1.54, real_number
+1, integer_number
 ;, simb_pv
-32, integer_number
-axde, ident
-{xak vav << ERRO!("comentario mal formado")
-as, ident
-}, ERRO! ("Caractere não permitido")
 while, simb_while
 (, simb_abrir_parentese
-boticario, ident
+x, ident
+<, simb_menor
+3, integer_number
+), simb_fechar_parentese
+do, simb_do
+x, ident
+:=, simb_atrib
+1.a, ERRO! ("Numero real mal formado")
+4, integer_number
+;, simb_pv
+axde, ident
+while, simb_while
+(, simb_abrir_parentese
+gabriel, ident
 <, simb_menor
 3, integer_number
 ), simb_fechar_parentese
@@ -29,7 +40,6 @@ x, ident
 y, ident
 +, simb_soma
 1, integer_number
-}, ERRO! ("Caractere não permitido")
 ;, simb_pv
 end, simb_end
 ., simb_dot

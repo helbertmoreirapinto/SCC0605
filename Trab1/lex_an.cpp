@@ -24,7 +24,7 @@ bool isNumber(char ch)
 
 bool isChar(char ch)
 {
-    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
 }
 
 bool isSymbol(char ch, map<string, string> symbols, ofstream &fileOut)
@@ -54,7 +54,6 @@ int autoNumber(char *str, int i, ofstream &fileOut)
         {
             number.push_back(str[i]);
             fileOut << number << ", ERRO! (\"Numero real mal formado\")" << endl;
-            i++;
             return i;
         }
         while (isNumber(str[i]))

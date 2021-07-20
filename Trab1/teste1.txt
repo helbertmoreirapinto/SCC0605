@@ -1,4 +1,4 @@
-program soma_i_j_vezes;
+program soma_1;
 {erro de ident, problema com palavra reservada}
 var i, j, res: integer;
 begin

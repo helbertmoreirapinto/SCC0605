@@ -14,14 +14,19 @@ Helbert Moreira Pinto - 10716504
 #include <vector>
 
 #define MAX_LINE 100
-
 using namespace std;
+
+typedef struct
+{
+    string simb;
+    int linha;
+} Token;
 
 class lex_an
 {
 public:
     map<string, string> words, symbols;
-    vector<string> tokens;
+    vector<Token> tokens;
     int linha;
 
     lex_an()
@@ -81,8 +86,10 @@ public:
         string x = symbols[chain];
         if (!x.empty())
         {
-            //fileOut << chain << ", " << symbols[chain] << endl;
-            tokens.push_back(symbols[chain]);
+            Token newToken;
+            newToken.simb = symbols[chain];
+            newToken.linha = linha;
+            tokens.push_back(newToken);
             return true;
         }
         return false;
@@ -110,13 +117,17 @@ public:
             while (isNumber(str[i]))
                 number.push_back(str[i++]);
             // str[i] n eh mais um number
-            //fileOut << number << ", real_number\n";
-            tokens.push_back(words["real"]);
+            Token newToken;
+            newToken.simb = words["real"];
+            newToken.linha = linha;
+            tokens.push_back(newToken);
         }
         else
         {
-            //fileOut << number << ", integer_number\n";
-            tokens.push_back(words["integer"]);
+            Token newToken;
+            newToken.simb = words["integer"];
+            newToken.linha = linha;
+            tokens.push_back(newToken);
         }
         i--;
         return i;
@@ -127,61 +138,65 @@ public:
         string chain;
         while (isChar(str[i]) || isNumber(str[i]))
             chain.push_back(str[i++]);
+        Token newToken;
+        newToken.linha = linha;
         if (!words[chain].empty())
-            tokens.push_back(words[chain]);
-        //fileOut << chain << ", " << words[chain] << endl;
+            newToken.simb = words[chain];
         else
-            tokens.push_back("ident");
-        //fileOut << chain << ", ident" << endl;
+            newToken.simb = "simb_ident";
+        tokens.push_back(newToken);
         i--;
         return i;
     }
 
     int autoGreater(char *str, int i)
     {
+        Token newToken;
+        newToken.linha = linha;
         if (str[i + 1] == '=')
         {
-            //fileOut << ">=, simb_maior_igual" << endl;
-            tokens.push_back(symbols[">="]);
+            newToken.simb = symbols[">="];
             i++;
         }
         else
-            //fileOut << ">, simb_maior" << endl;
-            tokens.push_back(symbols[">"]);
+            newToken.simb = symbols[">"];
+        tokens.push_back(newToken);
         return i;
     }
 
     int autoLesser(char *str, int i)
     {
+        Token newToken;
+        newToken.linha = linha;
         if (str[i + 1] == '=')
         {
-            //fileOut << "<=, simb_menor_igual" << endl;
-            tokens.push_back(symbols["<="]);
+            newToken.simb = symbols["<="];
             i++;
         }
         else if (str[i + 1] == '>')
         {
             //fileOut << "<>, simb_diff" << endl;
-            tokens.push_back(symbols[">"]);
+            newToken.simb = symbols["<>"];
             i++;
         }
         else
-            tokens.push_back(symbols["<"]);
-        //fileOut << "<, simb_menor" << endl;
+            newToken.simb = symbols["<"];
+        tokens.push_back(newToken);
         return i;
     }
 
     int autoColon(char *str, int i)
     {
+        Token newToken;
+        newToken.linha = linha;
         if (str[i + 1] == '=')
         {
-            //fileOut << ":=, simb_atrib" << endl;
-            tokens.push_back(symbols[":="]);
+            newToken.simb = symbols[":="];
             i++;
         }
         else
-            tokens.push_back(symbols[":"]);
-        //fileOut << ":, simb_dp" << endl;
+            newToken.simb = symbols[":"];
+        tokens.push_back(newToken);
         return i;
     }
 
@@ -239,7 +254,7 @@ public:
         cout << "Quantidade de tokens: " << tokens.size() << endl;
         for (int i = 0; i < tokens.size(); i++)
         {
-            cout << tokens[i] << endl;
+            cout << "Linha: " << tokens[i].linha << " Token: " << tokens[i].simb << endl;
         }
     }
 };

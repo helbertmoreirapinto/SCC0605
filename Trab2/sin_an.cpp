@@ -17,7 +17,6 @@ Helbert Moreira Pinto - 10716504
 
 using namespace std;
 
-#define ERRO 0;
 class sin_an
 {
 public:

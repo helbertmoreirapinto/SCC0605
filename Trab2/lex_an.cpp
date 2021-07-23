@@ -26,7 +26,7 @@ class lex_an
 {
 public:
     map<string, string> words, symbols;
-    vector<Token> tokens;
+    queue<Token> tokens;
     int linha;
 
     lex_an()
@@ -89,7 +89,7 @@ public:
             Token newToken;
             newToken.simb = symbols[chain];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
             return true;
         }
         return false;
@@ -118,14 +118,14 @@ public:
             Token newToken;
             newToken.simb = words["real"];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
         }
         else
         {
             Token newToken;
             newToken.simb = words["integer"];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
         }
         i--;
         return i;
@@ -142,7 +142,7 @@ public:
             newToken.simb = words[chain];
         else
             newToken.simb = "simb_ident";
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         i--;
         return i;
     }
@@ -158,7 +158,7 @@ public:
         }
         else
             newToken.simb = symbols[">"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -178,7 +178,7 @@ public:
         }
         else
             newToken.simb = symbols["<"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -193,7 +193,7 @@ public:
         }
         else
             newToken.simb = symbols[":"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -240,9 +240,9 @@ public:
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
         Token token;
-        for (int i = 0; i < tokens.size(); i++)
+        for (int i = 0; i < tokens.size(); i++, tokens.pop())
         {
-            token = tokens[i];
+            token = tokens.front();
             cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
         }
     }

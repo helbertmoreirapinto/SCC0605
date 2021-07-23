@@ -26,7 +26,7 @@ class lex_an
 {
 public:
     map<string, string> words, symbols;
-    vector<Token> tokens;
+    queue<Token> tokens;
     int linha;
 
     lex_an()
@@ -89,7 +89,7 @@ public:
             Token newToken;
             newToken.simb = symbols[chain];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
             return true;
         }
         return false;
@@ -118,14 +118,14 @@ public:
             Token newToken;
             newToken.simb = words["real"];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
         }
         else
         {
             Token newToken;
             newToken.simb = words["integer"];
             newToken.linha = linha;
-            tokens.push_back(newToken);
+            tokens.push(newToken);
         }
         i--;
         return i;
@@ -142,7 +142,7 @@ public:
             newToken.simb = words[chain];
         else
             newToken.simb = "simb_ident";
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         i--;
         return i;
     }
@@ -158,7 +158,7 @@ public:
         }
         else
             newToken.simb = symbols[">"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -178,7 +178,7 @@ public:
         }
         else
             newToken.simb = symbols["<"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -193,7 +193,7 @@ public:
         }
         else
             newToken.simb = symbols[":"];
-        tokens.push_back(newToken);
+        tokens.push(newToken);
         return i;
     }
 
@@ -240,9 +240,9 @@ public:
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
         Token token;
-        for (int i = 0; i < tokens.size(); i++)
+        for (int i = 0; i < tokens.size(); i++, tokens.pop())
         {
-            token = tokens[i];
+            token = tokens.front();
             cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
         }
     }
@@ -251,453 +251,422 @@ public:
 class sin_an
 {
 public:
-    vector<Token> tokens;
+    queue<Token> tokens;
 
-    sin_an(vector<Token> tkns) : tokens(tkns) {}
+    sin_an(queue<Token> tkns) : tokens(tkns) {}
 
-    int obter_simbolo(Token token, int i)
+    void obter_simbolo()
     {
-        cout << token.simb << endl;
-        i++;
-        return i;
+        cout << tokens.front().simb << endl;
+        tokens.pop();
     }
 
-    int numero(vector<Token> tokens, int i)
+    void numero()
     {
-        if (tokens[i].simb == "simb_tipo_int" || tokens[i].simb == "simb_tipo_real")
-            return obter_simbolo(tokens[i], i);
-        cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+        if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
+            obter_simbolo();
+        cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int tipo_var(vector<Token> tokens, int i)
+    void tipo_var()
     {
-        if (tokens[i].simb == "simb_tipo_int" || tokens[i].simb == "simb_tipo_real")
-            return obter_simbolo(tokens[i], i);
-        cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+        if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
+            obter_simbolo();
+        cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int variaveis(vector<Token> tokens, int i)
+    void variaveis()
     {
-        if (tokens[i].simb == "simb_ident")
-            return obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_ident")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = mais_var(tokens, i);
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        mais_var();
     }
 
-    int mais_var(vector<Token> tokens, int i)
+    void mais_var()
     {
-        if (tokens[i].simb == "simb_virgula")
+        if (tokens.front().simb == "simb_virgula")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = variaveis(tokens, i);
+            obter_simbolo();
+            variaveis();
         }
-        return i;
     }
 
-    int lista_par(vector<Token> tokens, int i)
+    void lista_par()
     {
-        i = variaveis(tokens, i);
-        if (tokens[i].simb == "simb_dp")
-            return obter_simbolo(tokens[i], i);
+        variaveis();
+        if (tokens.front().simb == "simb_dp")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = tipo_var(tokens, i);
-        i = mais_var(tokens, i);
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        tipo_var();
+        mais_var();
     }
 
-    int dc_c(vector<Token> tokens, int i)
+    void dc_c()
     {
-        if (tokens[i].simb == "simb_const")
+        if (tokens.front().simb == "simb_const")
         {
-            i = obter_simbolo(tokens[i], i);
-            if (tokens[i].simb == "simb_ident")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            if (tokens.front().simb == "simb_ident")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            if (tokens[i].simb == "simb_igual")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            if (tokens.front().simb == "simb_igual")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = numero(tokens, i);
-            if (tokens[i].simb == "simb_pv")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            numero();
+            if (tokens.front().simb == "simb_pv")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-
-        return i;
     }
 
-    int dc_v(vector<Token> tokens, int i)
+    void dc_v()
     {
-        if (tokens[i].simb == "simb_var")
+        if (tokens.front().simb == "simb_var")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = variaveis(tokens, i);
-            if (tokens[i].simb == "simb_dp")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            variaveis();
+            if (tokens.front().simb == "simb_dp")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = tipo_var(tokens, i);
-            if (tokens[i].simb == "simb_pv")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            tipo_var();
+            if (tokens.front().simb == "simb_pv")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-        return i;
     }
 
-    int parametros(vector<Token> tokens, int i)
+    void parametros()
     {
-        if (tokens[i].simb == "simb_abrir_parentese")
+        if (tokens.front().simb == "simb_abrir_parentese")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = lista_par(tokens, i);
-            if (tokens[i].simb == "simb_fechar_parentese")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            lista_par();
+            if (tokens.front().simb == "simb_fechar_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-        return i;
     }
 
-    int dc_loc(vector<Token> tokens, int i)
+    void dc_loc()
     {
-        return dc_v(tokens, i);
+        return dc_v();
     }
 
-    int corpo_p(vector<Token> tokens, int i)
+    void corpo_p()
     {
-        i = dc_loc(tokens, i);
-        if (tokens[i].simb == "simb_begin")
-            i = obter_simbolo(tokens[i], i);
+        dc_loc();
+        if (tokens.front().simb == "simb_begin")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = comandos(tokens, i);
-        if (tokens[i].simb == "simb_end")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        comandos();
+        if (tokens.front().simb == "simb_end")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        if (tokens[i].simb == "simb_pv")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        if (tokens.front().simb == "simb_pv")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int dc_p(vector<Token> tokens, int i)
+    void dc_p()
     {
-        if (tokens[i].simb == "simb_procedure")
+        if (tokens.front().simb == "simb_procedure")
         {
-            i = obter_simbolo(tokens[i], i);
-            if (tokens[i].simb == "simb_ident")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            if (tokens.front().simb == "simb_ident")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = parametros(tokens, i);
-            if (tokens[i].simb == "simb_pv")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            parametros();
+            if (tokens.front().simb == "simb_pv")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = corpo_p(tokens, i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            corpo_p();
         }
-        return i;
     }
 
-    int dc(vector<Token> tokens, int i)
+    void dc()
     {
-        i = dc_c(tokens, i);
-        i = dc_v(tokens, i);
-        i = dc_p(tokens, i);
-        return i;
+        dc_c();
+        dc_v();
+        dc_p();
     }
 
-    int comandos(vector<Token> tokens, int i)
+    void comandos()
     {
-        i = cmd(tokens, i);
-        if (tokens[i].simb == "simb_pv")
-            i = obter_simbolo(tokens[i], i);
+        cmd();
+        if (tokens.front().simb == "simb_pv")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int cmd(vector<Token> tokens, int i)
+    void cmd()
     {
-        if (tokens[i].simb == "simb_read" || tokens[i].simb == "simb_write")
+        if (tokens.front().simb == "simb_read" || tokens.front().simb == "simb_write")
         {
-            i = obter_simbolo(tokens[i], i);
-            if (tokens[i].simb == "simb_abrir_parentese")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            if (tokens.front().simb == "simb_abrir_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = variaveis(tokens, i);
-            if (tokens[i].simb == "simb_fechar_parentese")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            variaveis();
+            if (tokens.front().simb == "simb_fechar_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-        else if (tokens[i].simb == "simb_while")
+        else if (tokens.front().simb == "simb_while")
         {
-            i = obter_simbolo(tokens[i], i);
-            if (tokens[i].simb == "simb_abrir_parentese")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            if (tokens.front().simb == "simb_abrir_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = condicao(tokens, i);
-            if (tokens[i].simb == "simb_fechar_parentese")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            condicao();
+            if (tokens.front().simb == "simb_fechar_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            if (tokens[i].simb == "simb_do")
-                i = obter_simbolo(tokens[i], i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            if (tokens.front().simb == "simb_do")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = cmd(tokens, i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            cmd();
         }
-        else if (tokens[i].simb == "simb_if")
+        else if (tokens.front().simb == "simb_if")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = condicao(tokens, i);
-            if (tokens[i].simb == "simb_then")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            condicao();
+            if (tokens.front().simb == "simb_then")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-            i = cmd(tokens, i);
-            i = pfalsa(tokens, i);
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+            cmd();
+            pfalsa();
         }
-        else if (tokens[i].simb == "simb_ident")
+        else if (tokens.front().simb == "simb_ident")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = cmd_linha(tokens, i);
+            obter_simbolo();
+            cmd_linha();
         }
-        else if (tokens[i].simb == "simb_begin")
+        else if (tokens.front().simb == "simb_begin")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = comandos(tokens, i);
-            if (tokens[i].simb == "simb_end")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            comandos();
+            if (tokens.front().simb == "simb_end")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
         else
         {
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-
-        return i;
     }
 
-    int pfalsa(vector<Token> tokens, int i)
+    void pfalsa()
     {
-        if (tokens[i].simb == "else")
+        if (tokens.front().simb == "else")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = cmd(tokens, i);
+            obter_simbolo();
+            cmd();
         }
-        return i;
     }
 
-    int relacao(vector<Token> tokens, int i)
+    void relacao()
     {
-        if (tokens[i].simb == "simb_igual" || tokens[i].simb == "simb_diff" || tokens[i].simb == "simb_maior_igual" || tokens[i].simb == "simb_menor_igual" || tokens[i].simb == "simb_maior" || tokens[i].simb == "simb_menor")
-            i = obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_igual" || tokens.front().simb == "simb_diff" || tokens.front().simb == "simb_maior_igual" || tokens.front().simb == "simb_menor_igual" || tokens.front().simb == "simb_maior" || tokens.front().simb == "simb_menor")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int expressao(vector<Token> tokens, int i)
+    void expressao()
     {
-        i = termo(tokens, i);
-        i = outros_termos(tokens, i);
-        return i;
+        termo();
+        outros_termos();
     }
 
-    int op_un(vector<Token> tokens, int i)
+    void op_un()
     {
-        if (tokens[i].simb == "simb_soma" || tokens[i].simb == "simb_sub")
-            i = obter_simbolo(tokens[i], i);
-        return i;
+        if (tokens.front().simb == "simb_soma" || tokens.front().simb == "simb_sub")
+            obter_simbolo();
     }
 
-    int op_ad(vector<Token> tokens, int i)
+    void op_ad()
     {
-        if (tokens[i].simb == "simb_soma" || tokens[i].simb == "simb_sub")
-            i = obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_soma" || tokens.front().simb == "simb_sub")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int op_mul(vector<Token> tokens, int i)
+    void op_mul()
     {
-        if (tokens[i].simb == "simb_mul" || tokens[i].simb == "simb_div")
-            i = obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_mul" || tokens.front().simb == "simb_div")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    int termo(vector<Token> tokens, int i)
+    void termo()
     {
-        i = op_un(tokens, i);
-        i = fator(tokens, i);
-        i = mais_fatores(tokens, i);
-        return i;
+        op_un();
+        fator();
+        mais_fatores();
     }
 
-    int fator(vector<Token> tokens, int i)
+    void fator()
     {
-        if (tokens[i].simb == "simb_ident")
+        if (tokens.front().simb == "simb_ident")
         {
-            i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
         }
-        else if (tokens[i].simb == "simb_abrir_parentese")
+        else if (tokens.front().simb == "simb_abrir_parentese")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = expressao(tokens, i);
-            if (tokens[i].simb == "simb_fechar_parentese")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            expressao();
+            if (tokens.front().simb == "simb_fechar_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
         else
         {
-            i = numero(tokens, i);
+            numero();
         }
-        return i;
     }
 
-    int mais_fatores(vector<Token> tokens, int i)
+    void mais_fatores()
     {
-        if (tokens[i].simb == "simb_mul" || tokens[i].simb == "simb_div")
+        if (tokens.front().simb == "simb_mul" || tokens.front().simb == "simb_div")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = fator(tokens, i);
+            obter_simbolo();
+            fator();
         }
-        return i;
     }
 
-    int outros_termos(vector<Token> tokens, int i)
+    void outros_termos()
     {
-        if (tokens[i].simb == "simb_soma" || tokens[i].simb == "simb_sub")
+        if (tokens.front().simb == "simb_soma" || tokens.front().simb == "simb_sub")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = termo(tokens, i);
+            obter_simbolo();
+            termo();
         }
-        return i;
     }
 
-    int condicao(vector<Token> tokens, int i)
+    void condicao()
     {
-        i = expressao(tokens, i);
-        i = relacao(tokens, i);
-        i = expressao(tokens, i);
-        return i;
+        expressao();
+        relacao();
+        expressao();
     }
 
-    int cmd_linha(vector<Token> tokens, int i)
+    void cmd_linha()
     {
-        if (tokens[i].simb == "simb_atrib")
+        if (tokens.front().simb == "simb_atrib")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = expressao(tokens, i);
+            obter_simbolo();
+            expressao();
         }
         else
         {
-            i = lista_arg(tokens, i);
+            lista_arg();
         }
-        return i;
     }
 
-    int argumentos(vector<Token> tokens, int i)
+    void argumentos()
     {
-        if (tokens[i].simb == "simb_ident")
-            i = obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_ident")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = mais_ident(tokens, i);
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        mais_ident();
     }
 
-    int mais_ident(vector<Token> tokens, int i)
+    void mais_ident()
     {
-        if (tokens[i].simb == "simb_pv")
+        if (tokens.front().simb == "simb_pv")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = argumentos(tokens, i);
+            obter_simbolo();
+            argumentos();
         }
-        return i;
     }
 
-    int lista_arg(vector<Token> tokens, int i)
+    void lista_arg()
     {
-        if (tokens[i].simb == "simb_abrir_parentese")
+        if (tokens.front().simb == "simb_abrir_parentese")
         {
-            i = obter_simbolo(tokens[i], i);
-            i = argumentos(tokens, i);
-            if (tokens[i].simb == "simb_fechar_parentese")
-                i = obter_simbolo(tokens[i], i);
+            obter_simbolo();
+            argumentos();
+            if (tokens.front().simb == "simb_fechar_parentese")
+                obter_simbolo();
             else
-                cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
+                cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
         }
-        return i;
     }
 
-    int corpo(vector<Token> tokens, int i)
+    void corpo()
     {
-        i = dc(tokens, i);
-        if (tokens[i].simb == "simb_begin")
-            i = obter_simbolo(tokens[i], i);
+        dc();
+        if (tokens.front().simb == "simb_begin")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = comandos(tokens, i);
-        if (tokens[i].simb == "simb_end")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        comandos();
+        if (tokens.front().simb == "simb_end")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return i;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
-    bool programa(vector<Token> tokens, int i)
+    void programa()
     {
-        if (tokens[i].simb == "simb_program")
-            i = obter_simbolo(tokens[i], i);
+        if (tokens.front().simb == "simb_program")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        if (tokens[i].simb == "simb_ident")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        if (tokens.front().simb == "simb_ident")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        if (tokens[i].simb == "simb_pv")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        if (tokens.front().simb == "simb_pv")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        i = corpo(tokens, i);
-        if (tokens[i].simb == "simb_dot")
-            i = obter_simbolo(tokens[i], i);
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        corpo();
+        if (tokens.front().simb == "simb_dot")
+            obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens[i].linha << endl;
-        return true;
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
     void processaTokens()
     {
-        programa(tokens, 0);
+        programa();
     }
 
     void imprimeTokens()
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
-        for (int i = 0; i < tokens.size(); i++)
+        Token token;
+        for (int i = 0; i < tokens.size(); i++, tokens.pop())
         {
-            cout << tokens[i].simb << endl;
+            token = tokens.front();
+            cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
         }
     }
 };
@@ -739,7 +708,7 @@ int main()
     fileIn.close();
     //fileOut.close();
 
-    //vector<Token> tokens{"simb_program", "simb_ident", "simb_pv", "simb_var", "simb_ident", "simb_dp", "simb_tipo_int", "simb_pv", "simb_begin", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_ident", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_ident", "simb_soma", "simb_tipo_int", "simb_pv", "simb_end", "simb_dot"};
+    //{"simb_program", "simb_ident", "simb_pv", "simb_var", "simb_ident", "simb_dp", "simb_tipo_int", "simb_pv", "simb_begin", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_ident", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_ident", "simb_soma", "simb_tipo_int", "simb_pv", "simb_end", "simb_dot"};
 
     sin_an SinAn(LexAn.tokens);
     //SinAn.imprimeTokens();

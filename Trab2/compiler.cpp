@@ -257,7 +257,7 @@ public:
 
     void obter_simbolo()
     {
-        cout << tokens.front().linha << ": " << tokens.front().simb << endl;
+        //cout << tokens.front().linha << ": " << tokens.front().simb << endl;
         tokens.pop();
     }
 
@@ -374,7 +374,7 @@ public:
         if (tokens.front().simb == "simb_end")
             obter_simbolo();
         else
-            cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_end esperado" << endl;
+            cout << "Erro sintatico aqui linha: " << tokens.front().linha << ", simb_end esperado" << endl;
         if (tokens.front().simb == "simb_pv")
             obter_simbolo();
         else
@@ -408,14 +408,17 @@ public:
 
     void comandos()
     {
-        cmd();
-        if (tokens.front().simb == "simb_pv")
-            obter_simbolo();
-        else
-            cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+        if (cmd())
+        {
+            if (tokens.front().simb == "simb_pv")
+                obter_simbolo();
+            else
+                cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+            comandos();
+        }
     }
 
-    void cmd()
+    bool cmd()
     {
         if (tokens.front().simb == "simb_read" || tokens.front().simb == "simb_write")
         {
@@ -475,8 +478,9 @@ public:
         }
         else
         {
-            cout << "Erro sintatico na linha: " << tokens.front().linha << ", cmd esperado" << endl;
+            return false;
         }
+        return true;
     }
 
     void pfalsa()
@@ -558,6 +562,7 @@ public:
         {
             obter_simbolo();
             fator();
+            mais_fatores();
         }
     }
 
@@ -567,6 +572,7 @@ public:
         {
             obter_simbolo();
             termo();
+            outros_termos();
         }
     }
 

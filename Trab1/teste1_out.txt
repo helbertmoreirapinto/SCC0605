@@ -1,5 +1,5 @@
 program, simb_program
-soma_i_j_vezes, ident
+soma_1, ident
 ;, simb_pv
 var, simb_var
 i, ident

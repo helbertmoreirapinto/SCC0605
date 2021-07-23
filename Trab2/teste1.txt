@@ -3,8 +3,8 @@ program soma_1;
 var i, j, res: integer;
 begin
 read(i,j);
-1res:=0;
-while (j>0) du
+res:=0;
+while (j>0) do
 	begin
 	res:=res+i;
 	j:=j-1;

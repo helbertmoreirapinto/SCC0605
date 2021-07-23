@@ -157,6 +157,7 @@ public:
             i = obter_simbolo(tokens[i], i);
         else
             cout << "Erro sintatico!" << endl;
+        return i;
     }
 
     int dc_p(vector<string> tokens, int i)
@@ -193,6 +194,7 @@ public:
             i = obter_simbolo(tokens[i], i);
         else
             cout << "Erro sintatico!" << endl;
+        return i;
     }
 
     int cmd(vector<string> tokens, int i)
@@ -268,6 +270,7 @@ public:
             i = obter_simbolo(tokens[i], i);
             i = cmd(tokens, i);
         }
+        return i;
     }
 
     int relacao(vector<string> tokens, int i)
@@ -471,9 +474,9 @@ public:
 
 int main()
 {
-    vector<string> tokens{"simb_program", "simb_ident", "simb_pv", "dc", "simb_begin", "comandos", "simb_end", "simb_dot"};
+    vector<string> tokens{"simb_program", "simb_ident", "simb_pv", "simb_var", "simb_ident", "simb_dp", "simb_tipo_int", "simb_pv", "simb_begin", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_ident", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_ident", "simb_soma", "simb_tipo_int", "simb_pv", "simb_end", "simb_dot"};
     sin_an SinAn(tokens);
-    SinAn.imprimeTokens();
+    //SinAn.imprimeTokens();
     SinAn.processaTokens();
     return 0;
 }

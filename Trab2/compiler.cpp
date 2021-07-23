@@ -257,7 +257,7 @@ public:
 
     void obter_simbolo()
     {
-        cout << tokens.front().simb << endl;
+        cout << tokens.front().linha << ": " << tokens.front().simb << endl;
         tokens.pop();
     }
 
@@ -265,14 +265,16 @@ public:
     {
         if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
             obter_simbolo();
-        cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        else
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
     void tipo_var()
     {
         if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
             obter_simbolo();
-        cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
+        else
+            cout << "Erro sintatico na linha: " << tokens.front().linha << endl;
     }
 
     void variaveis()

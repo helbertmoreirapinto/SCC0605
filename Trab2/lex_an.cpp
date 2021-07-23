@@ -11,7 +11,7 @@ Helbert Moreira Pinto - 10716504
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <vector>
+#include <bits/stdc++.h>
 
 #define MAX_LINE 100
 using namespace std;
@@ -77,7 +77,7 @@ public:
 
     bool isChar(char ch)
     {
-        return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+        return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
     }
 
     bool isSymbol(char ch)
@@ -109,9 +109,7 @@ public:
             if (!isNumber(str[i]))
             {
                 number.push_back(str[i]);
-                //fileOut << number << ", ERRO! (\"Numero real mal formado\")" << endl;
                 cout << "Erro léxico na linha " << linha << ": número real mal formado" << endl;
-                i++;
                 return i;
             }
             while (isNumber(str[i]))
@@ -175,7 +173,6 @@ public:
         }
         else if (str[i + 1] == '>')
         {
-            //fileOut << "<>, simb_diff" << endl;
             newToken.simb = symbols["<>"];
             i++;
         }
@@ -207,16 +204,9 @@ public:
             chain.push_back(str[i++]);
 
         if (str[i] == '}')
-        {
-            chain.push_back(str[i]);
-            // poderia ser impresso, mas uma função do léxico é ignorar comentários fileOut << chain << ", comment" << endl;
-            i++;
-        }
+            chain.push_back(str[i++]);
         else
-        {
-            //fileOut << chain << " << ERRO!(\"comentario mal formado\")" << endl; //caso o comentário não seja encerrado na mesma linha
             cout << "Erro léxico na linha " << linha << ": comentário mal formado" << endl;
-        }
         return i;
     }
 
@@ -242,19 +232,18 @@ public:
             else if (isSymbol(str[i]))
                 continue;
             else
-            {
-                //fileOut << str[i] << ", ERRO! (\"Caractere não permitido\")" << endl;
                 cout << "Erro léxico na linha " << linha << ": caractere não permitido" << endl;
-            }
         }
     }
 
     void imprimeTokens()
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
+        Token token;
         for (int i = 0; i < tokens.size(); i++)
         {
-            cout << "Linha: " << tokens[i].linha << " Token: " << tokens[i].simb << endl;
+            token = tokens[i];
+            cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
         }
     }
 };

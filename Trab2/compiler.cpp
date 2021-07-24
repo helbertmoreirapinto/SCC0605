@@ -268,7 +268,7 @@ class sin_an
 {
 public:
     queue<Token> tokens;
-    queue<Token> S;
+    vector<string> simb_sincr{"simb_program", "simb_begin", "simb_end", "simb_const", "simb_procedure", "simb_read", "simb_write", "simb_while", "simb_if", "simb_else", "simb_do", "simb_to"};
     int errors = 0;
 
     sin_an(queue<Token> tkns) : tokens(tkns) {}
@@ -276,6 +276,10 @@ public:
     void ERRO()
     {
         errors++;
+        // verifica se ainda não chegou ao fim do programa
+        // verifica se token corrente nao pertence ao conjunto simb_sincr
+        while (!tokens.empty() && *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb)
+            obter_simbolo();
     }
 
     void obter_simbolo()

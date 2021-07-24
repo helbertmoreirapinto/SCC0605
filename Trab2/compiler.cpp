@@ -261,8 +261,15 @@ class sin_an
 {
 public:
     queue<Token> tokens;
+    queue<Token> S;
+    int errors = 0;
 
     sin_an(queue<Token> tkns) : tokens(tkns) {}
+
+    void ERRO()
+    {
+        errors++;
+    }
 
     void obter_simbolo()
     {
@@ -275,7 +282,10 @@ public:
         if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", numero esperado" << endl;
+            ERRO();
+        }
     }
 
     void tipo_var()
@@ -283,7 +293,10 @@ public:
         if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_tipo_real")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", tipo_var esperado" << endl;
+            ERRO();
+        }
     }
 
     void variaveis()
@@ -291,7 +304,10 @@ public:
         if (tokens.front().simb == "simb_ident")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            ERRO();
+        }
         mais_var();
     }
 
@@ -310,7 +326,10 @@ public:
         if (tokens.front().simb == "simb_dp")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dp esperado" << endl;
+            ERRO();
+        }
         tipo_var();
         mais_var();
     }
@@ -323,16 +342,25 @@ public:
             if (tokens.front().simb == "simb_ident")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+                ERRO();
+            }
             if (tokens.front().simb == "simb_igual")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_igual esperado" << endl;
+                ERRO();
+            }
             numero();
             if (tokens.front().simb == "simb_pv")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                ERRO();
+            }
         }
     }
 
@@ -345,12 +373,18 @@ public:
             if (tokens.front().simb == "simb_dp")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dp esperado" << endl;
+                ERRO();
+            }
             tipo_var();
             if (tokens.front().simb == "simb_pv")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                ERRO();
+            }
         }
     }
 
@@ -363,7 +397,10 @@ public:
             if (tokens.front().simb == "simb_fechar_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                ERRO();
+            }
         }
     }
 
@@ -378,16 +415,25 @@ public:
         if (tokens.front().simb == "simb_begin")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_begin esperado" << endl;
+            ERRO();
+        }
         comandos();
         if (tokens.front().simb == "simb_end")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico aqui linha: " << tokens.front().linha << ", simb_end esperado" << endl;
+            ERRO();
+        }
         if (tokens.front().simb == "simb_pv")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+            ERRO();
+        }
     }
 
     void dc_p()
@@ -398,12 +444,18 @@ public:
             if (tokens.front().simb == "simb_ident")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+                ERRO();
+            }
             parametros();
             if (tokens.front().simb == "simb_pv")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                ERRO();
+            }
             corpo_p();
         }
     }
@@ -422,7 +474,10 @@ public:
             if (tokens.front().simb == "simb_pv")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                ERRO();
+            }
             comandos();
         }
     }
@@ -435,12 +490,18 @@ public:
             if (tokens.front().simb == "simb_abrir_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_abrir_parentese esperado" << endl;
+                ERRO();
+            }
             variaveis();
             if (tokens.front().simb == "simb_fechar_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                ERRO();
+            }
         }
         else if (tokens.front().simb == "simb_while")
         {
@@ -448,16 +509,25 @@ public:
             if (tokens.front().simb == "simb_abrir_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_abrir_parentese esperado" << endl;
+                ERRO();
+            }
             condicao();
             if (tokens.front().simb == "simb_fechar_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                ERRO();
+            }
             if (tokens.front().simb == "simb_do")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_do esperado" << endl;
+                ERRO();
+            }
             cmd();
         }
         else if (tokens.front().simb == "simb_if")
@@ -467,7 +537,10 @@ public:
             if (tokens.front().simb == "simb_then")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_then esperado" << endl;
+                ERRO();
+            }
             cmd();
             pfalsa();
         }
@@ -483,7 +556,10 @@ public:
             if (tokens.front().simb == "simb_end")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_end esperado" << endl;
+                ERRO();
+            }
         }
         else
         {
@@ -506,7 +582,10 @@ public:
         if (tokens.front().simb == "simb_igual" || tokens.front().simb == "simb_diff" || tokens.front().simb == "simb_maior_igual" || tokens.front().simb == "simb_menor_igual" || tokens.front().simb == "simb_maior" || tokens.front().simb == "simb_menor")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", relacao esperado" << endl;
+            ERRO();
+        }
     }
 
     void expressao()
@@ -526,7 +605,10 @@ public:
         if (tokens.front().simb == "simb_soma" || tokens.front().simb == "simb_sub")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", op_ad esperado" << endl;
+            ERRO();
+        }
     }
 
     void op_mul()
@@ -534,7 +616,10 @@ public:
         if (tokens.front().simb == "simb_mul" || tokens.front().simb == "simb_div")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", op_mul esperado" << endl;
+            ERRO();
+        }
     }
 
     void termo()
@@ -557,7 +642,10 @@ public:
             if (tokens.front().simb == "simb_fechar_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                ERRO();
+            }
         }
         else
         {
@@ -610,7 +698,10 @@ public:
         if (tokens.front().simb == "simb_ident")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            ERRO();
+        }
         mais_ident();
     }
 
@@ -632,7 +723,10 @@ public:
             if (tokens.front().simb == "simb_fechar_parentese")
                 obter_simbolo();
             else
+            {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                ERRO();
+            }
         }
     }
 
@@ -642,12 +736,18 @@ public:
         if (tokens.front().simb == "simb_begin")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_begin esperado" << endl;
+            ERRO();
+        }
         comandos();
         if (tokens.front().simb == "simb_end")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_end esperado" << endl;
+            ERRO();
+        }
     }
 
     void programa()
@@ -655,20 +755,32 @@ public:
         if (tokens.front().simb == "simb_program")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_program esperado" << endl;
+            ERRO();
+        }
         if (tokens.front().simb == "simb_ident")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            ERRO();
+        }
         if (tokens.front().simb == "simb_pv")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+            ERRO();
+        }
         corpo();
         if (tokens.front().simb == "simb_dot")
             obter_simbolo();
         else
+        {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dot esperado" << endl;
+            ERRO();
+        }
     }
 
     void processaTokens()
@@ -725,10 +837,9 @@ int main()
     fileIn.close();
     //fileOut.close();
 
-    //{"simb_program", "simb_ident", "simb_pv", "simb_var", "simb_ident", "simb_dp", "simb_tipo_int", "simb_pv", "simb_begin", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_tipo_int", "simb_pv", "simb_ident", "simb_while", "simb_abrir_parentese", "simb_ident", "simb_menor", "simb_tipo_int", "simb_fechar_parentese", "simb_do", "simb_ident", "simb_atrib", "simb_ident", "simb_soma", "simb_tipo_int", "simb_pv", "simb_end", "simb_dot"};
-
     sin_an SinAn(LexAn.tokens);
-    //SinAn.imprimeTokens();
     SinAn.processaTokens();
+    cout << "Quantidade de erros encontrados: " << SinAn.errors << endl;
+
     return 0;
 }

@@ -1,5 +1,5 @@
 program soma_1;
-{erro de ident, problema com palavra reservada}
+{erro de ident, problema com palavra reservada
 var i, j, res: integer;
 begin
 read(i,j);

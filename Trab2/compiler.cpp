@@ -268,6 +268,7 @@ class sin_an
 {
 public:
     queue<Token> tokens;
+    queue<string> seguidores;
     vector<string> simb_sincr{"simb_program", "simb_begin", "simb_end", "simb_const", "simb_procedure", "simb_read", "simb_write", "simb_while", "simb_if", "simb_else", "simb_do", "simb_to"};
     int errors = 0;
 
@@ -278,8 +279,11 @@ public:
         errors++;
         // verifica se ainda não chegou ao fim do programa
         // verifica se token corrente nao pertence ao conjunto simb_sincr
-        while (!tokens.empty() && *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb)
+        while (!tokens.empty() && (tokens.front().simb != seguidores.front() || *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb))
+        {
             obter_simbolo();
+            seguidores.pop();
+        }
     }
 
     void obter_simbolo()
@@ -317,6 +321,8 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            // Push Primeiro mais_var
+            seguidores.push(",");
             ERRO();
         }
         mais_var();
@@ -339,10 +345,21 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dp esperado" << endl;
+            // Push Primeiro tipo_var
+            seguidores.push("simb_tipo_int");
+            seguidores.push("simb_tipo_real");
             ERRO();
         }
         tipo_var();
-        mais_var();
+        mais_par();
+    }
+
+    void mais_par()
+    {
+        if (tokens.front().simb == "simb_pv")
+        {
+            lista_par();
+        }
     }
 
     void dc_c()
@@ -355,6 +372,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+                seguidores.push("simb_igual");
                 ERRO();
             }
             if (tokens.front().simb == "simb_igual")
@@ -362,6 +380,9 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_igual esperado" << endl;
+                // Push Primeiro numero
+                seguidores.push("simb_numero_int");
+                seguidores.push("simb_numero_real");
                 ERRO();
             }
             numero();
@@ -370,6 +391,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                // Push primeiro dc_c
+                seguidores.push("simb_const");
                 ERRO();
             }
             dc_c();
@@ -387,6 +410,9 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dp esperado" << endl;
+                // Push Primeiro tipo_var
+                seguidores.push("simb_tipo_int");
+                seguidores.push("simb_tipo_real");
                 ERRO();
             }
             tipo_var();
@@ -395,6 +421,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                // Push Primeiro dc_v
+                seguidores.push("simb_var");
                 ERRO();
             }
             dc_v();
@@ -430,6 +458,8 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_begin esperado" << endl;
+            // Push Primeiro comandos
+            // Todos estao nos simbolos de sincronizacao
             ERRO();
         }
         comandos();
@@ -438,6 +468,7 @@ public:
         else
         {
             cout << "Erro sintatico aqui linha: " << tokens.front().linha << ", simb_end esperado" << endl;
+            seguidores.push("simb_pv");
             ERRO();
         }
         if (tokens.front().simb == "simb_pv")
@@ -459,6 +490,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+                // Push Primeiro parametros
+                seguidores.push("simb_abrir_parentese");
                 ERRO();
             }
             parametros();
@@ -467,6 +500,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                // Push Primeiro corpo_p
+                seguidores.push("simb_var");
                 ERRO();
             }
             corpo_p();
@@ -490,6 +525,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+                // Push Primeiro comandos
+                // Todos estao nos simbolos de sincronizacao
                 ERRO();
             }
             comandos();
@@ -507,6 +544,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_abrir_parentese esperado" << endl;
+                // Push Primeiro variaveis
+                seguidores.push("simb_ident");
                 ERRO();
             }
             variaveis();
@@ -527,6 +566,9 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_abrir_parentese esperado" << endl;
+                // Push Primeiro condicao
+                seguidores.push("simb_soma");
+                seguidores.push("simb_sub");
                 ERRO();
             }
             condicao();
@@ -535,6 +577,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_fechar_parentese esperado" << endl;
+                seguidores.push("simb_do");
                 ERRO();
             }
             if (tokens.front().simb == "simb_do")
@@ -542,6 +585,8 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_do esperado" << endl;
+                // Push primeiro cmd
+                //seguidores.push("ident");
                 ERRO();
             }
             cmd();
@@ -554,6 +599,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+                seguidores.push("simb_atrib");
                 ERRO();
             }
             if (tokens.front().simb == "simb_atrib")
@@ -561,6 +607,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_atrib esperado" << endl;
+                seguidores.push("simb_tipo_int");
                 ERRO();
             }
             if (tokens.front().simb == "simb_tipo_int")
@@ -568,6 +615,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_tipo_int esperado" << endl;
+                seguidores.push("simb_to");
                 ERRO();
             }
             if (tokens.front().simb == "simb_to")
@@ -575,6 +623,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_to esperado" << endl;
+                seguidores.push("simb_ident");
                 ERRO();
             }
             if (tokens.front().simb == "simb_ident")
@@ -589,6 +638,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_do esperado" << endl;
+                // Push Primeiro cmd
                 ERRO();
             }
             cmd();
@@ -602,6 +652,7 @@ public:
             else
             {
                 cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_then esperado" << endl;
+                // Push Primeiro cmd
                 ERRO();
             }
             cmd();
@@ -763,6 +814,8 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            // Push Primeiro mais_ident
+            seguidores.push("simb_pv");
             ERRO();
         }
         mais_ident();
@@ -801,6 +854,8 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_begin esperado" << endl;
+            // Push Primeiro comandos
+            // Igual aos simbolos de sincronizacao
             ERRO();
         }
         comandos();
@@ -820,6 +875,7 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_program esperado" << endl;
+            seguidores.push("simb_ident");
             ERRO();
         }
         if (tokens.front().simb == "simb_ident")
@@ -827,6 +883,7 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_ident esperado" << endl;
+            seguidores.push("simb_pv");
             ERRO();
         }
         if (tokens.front().simb == "simb_pv")
@@ -834,6 +891,10 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_pv esperado" << endl;
+            // Push primeiro corpo
+            seguidores.push("simb_const");
+            seguidores.push("simb_var");
+            seguidores.push("simb_procedure");
             ERRO();
         }
         corpo();
@@ -842,7 +903,7 @@ public:
         else
         {
             cout << "Erro sintatico na linha: " << tokens.front().linha << ", simb_dot esperado" << endl;
-            ERRO();
+            //ERRO();
         }
     }
 

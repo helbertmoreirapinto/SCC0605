@@ -134,6 +134,10 @@ public:
                 while (isChar(str[i]) || isNumber(str[i]))
                     i++;
                 cout << "Erro léxico na linha " << linha << ": ident mal formado" << endl;
+                Token newToken;
+                newToken.simb = "simb_ident";
+                newToken.linha = linha;
+                tokens.push(newToken);
                 errors++;
             }
         }
@@ -274,33 +278,36 @@ public:
 
     sin_an(queue<Token> tkns) : tokens(tkns) {}
 
+    void obter_simbolo()
+    {
+        //cout << tokens.front().linha << ": " << tokens.front().simb << endl;
+        tokens.pop();
+    }
+
     void ERRO()
     {
         errors++;
         // verifica se ainda não chegou ao fim do programa
         // verifica se token corrente nao pertence ao conjunto simb_sincr
         /*cout << "Token de ERRO: " << tokens.front().simb << endl;
+        cout << "Tamanho seguidor: " << seguidores.size() << endl;
         for (int i = 0; i < seguidores.front().size(); i++)
         {
             cout << "Seguidor de ERRO: " << seguidores.front()[i] << endl;
         }*/
-
-        while (!tokens.empty() && *find(seguidores.front().begin(), seguidores.front().end(), tokens.front().simb) != tokens.front().simb && *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb)
+        // tratar caso do seguidor vazio!
+        while (!tokens.empty() && *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb)
         {
+            if (!seguidores.empty() && *find(seguidores.front().begin(), seguidores.front().end(), tokens.front().simb) != tokens.front().simb)
+                seguidores.pop();
             obter_simbolo();
-            seguidores.pop();
             /*cout << "Token de ERRO: " << tokens.front().simb << endl;
+            cout << "Tamanho seguidor: " << seguidores.size() << endl;
             for (int i = 0; i < seguidores.front().size(); i++)
             {
                 cout << "Seguidor de ERRO: " << seguidores.front()[i] << endl;
             }*/
         }
-    }
-
-    void obter_simbolo()
-    {
-        cout << tokens.front().linha << ": " << tokens.front().simb << endl;
-        tokens.pop();
     }
 
     void numero()

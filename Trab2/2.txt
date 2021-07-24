@@ -8,5 +8,5 @@ begin
         begin
         fat:=fat*aux;
     end;
-write(fat);
+    write(fat);
 end.

@@ -27,7 +27,8 @@ class lex_an
 public:
     map<string, string> words, symbols;
     queue<Token> tokens;
-    int linha;
+    int linha = 1;
+    int errors = 0;
 
     lex_an()
     {
@@ -66,8 +67,6 @@ public:
         symbols["*"] = "simb_mul";
         symbols["("] = "simb_abrir_parentese";
         symbols[")"] = "simb_fechar_parentese";
-
-        linha = 1;
     }
 
     bool isNumber(char ch)
@@ -110,6 +109,7 @@ public:
             {
                 number.push_back(str[i]);
                 cout << "Erro léxico na linha " << linha << ": número real mal formado" << endl;
+                errors++;
                 return i;
             }
             while (isNumber(str[i]))
@@ -134,6 +134,7 @@ public:
                 while (isChar(str[i]) || isNumber(str[i]))
                     i++;
                 cout << "Erro léxico na linha " << linha << ": ident mal formado" << endl;
+                errors++;
             }
         }
         i--;
@@ -215,7 +216,10 @@ public:
         if (str[i] == '}')
             chain.push_back(str[i++]);
         else
+        {
             cout << "Erro léxico na linha " << linha << ": comentário mal formado" << endl;
+            errors++;
+        }
         return i;
     }
 
@@ -241,7 +245,10 @@ public:
             else if (isSymbol(str[i]))
                 continue;
             else
+            {
                 cout << "Erro léxico na linha " << linha << ": caractere não permitido" << endl;
+                errors++;
+            }
         }
     }
 

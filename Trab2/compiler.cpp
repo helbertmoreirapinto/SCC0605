@@ -122,10 +122,19 @@ public:
         }
         else
         {
-            Token newToken;
-            newToken.simb = words["integer"];
-            newToken.linha = linha;
-            tokens.push(newToken);
+            if (!isChar(str[i]))
+            {
+                Token newToken;
+                newToken.simb = words["integer"];
+                newToken.linha = linha;
+                tokens.push(newToken);
+            }
+            else
+            {
+                while (isChar(str[i]) || isNumber(str[i]))
+                    i++;
+                cout << "Erro léxico na linha " << linha << ": ident mal formado" << endl;
+            }
         }
         i--;
         return i;

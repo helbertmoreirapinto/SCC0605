@@ -8,8 +8,9 @@ begin
 	begin
 		x:=1.54; {axde} {xas}
 	end;
-	while (gabriel <3) {teste @@_@@  if} do 
-	begin
-		x:=y+1;
+	for aux:=1 to x do
+	begin 
+		fat:=fat*aux; 
 	end;
+end;
 end.

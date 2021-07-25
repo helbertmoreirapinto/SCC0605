@@ -4,7 +4,7 @@ var i, j, res: integer;
 begin
 	read(i,j);
 	res:=0;
-	while (j>0() do
+	while (j>0 do
 		begin
 		res:=res+i;
 		j:=j-1;

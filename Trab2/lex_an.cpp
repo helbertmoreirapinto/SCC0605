@@ -44,11 +44,12 @@ public:
         words["else"] = "simb_else";
         words["then"] = "simb_then";
         words["read"] = "simb_read";
-        words["write"] = "write";
+        words["write"] = "simb_write";
         words["while"] = "simb_while";
         words["do"] = "simb_do";
         words["for"] = "simb_for";
         words["to"] = "simb_to";
+        words["downto"] = "simb_downto";
 
         symbols[":="] = "simb_atrib";
         symbols["<>"] = "simb_diff";
@@ -266,11 +267,13 @@ public:
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
         Token token;
-        for (int i = 0; i < tokens.size(); i++, tokens.pop())
+        while (!tokens.empty())
         {
             token = tokens.front();
             cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
+            tokens.pop();
         }
+        cout << "Imprimiu todos" << endl;
     }
 };
 

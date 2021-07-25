@@ -44,7 +44,7 @@ public:
         words["else"] = "simb_else";
         words["then"] = "simb_then";
         words["read"] = "simb_read";
-        words["write"] = "write";
+        words["write"] = "simb_write";
         words["while"] = "simb_while";
         words["do"] = "simb_do";
         words["for"] = "simb_for";
@@ -267,11 +267,13 @@ public:
     {
         cout << "Quantidade de tokens: " << tokens.size() << endl;
         Token token;
-        for (int i = 0; i < tokens.size(); i++, tokens.pop())
+        while (!tokens.empty())
         {
             token = tokens.front();
             cout << "Linha: " << token.linha << " Token: " << token.simb << endl;
+            tokens.pop();
         }
+        cout << "Imprimiu todos" << endl;
     }
 };
 
@@ -297,15 +299,11 @@ public:
 
         errors++;
         cout << "Erro sintatico na linha: " << tokens.front().linha << ", " << msg << endl;
+
         // verifica se ainda não chegou ao fim do programa
         // verifica se token corrente nao pertence ao conjunto simb_sincr
-        /*cout << "Token de ERRO: " << tokens.front().simb << endl;
-        cout << "Tamanho seguidor: " << seguidores.size() << endl;
-        for (int i = 0; i < seguidores.front().size(); i++)
-        {
-            cout << "Seguidor de ERRO: " << seguidores.front()[i] << endl;
-        }*/
-        // tratar caso do seguidor vazio!
+        // verifica se tokens corrente nao pertence ao vetor de seguidores
+
         while (!tokens.empty() && *find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) != tokens.front().simb)
         {
             if (!S.empty() && *find(S.begin(), S.end(), tokens.front().simb) == tokens.front().simb)

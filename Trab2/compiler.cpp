@@ -49,6 +49,7 @@ public:
         words["do"] = "simb_do";
         words["for"] = "simb_for";
         words["to"] = "simb_to";
+        words["downto"] = "simb_downto";
 
         symbols[":="] = "simb_atrib";
         symbols["<>"] = "simb_diff";
@@ -285,7 +286,7 @@ public:
 
     void obter_simbolo()
     {
-        //cout << tokens.front().linha << ": " << tokens.front().simb << endl;
+        cout << tokens.front().linha << ": " << tokens.front().simb << endl;
         tokens.pop();
     }
 
@@ -610,29 +611,29 @@ public:
                 obter_simbolo();
             else
             {
-                vector<string> S{"simb_tipo_int"};
+                vector<string> S{"simb_tipo_int", "simb_ident"};
                 ERRO(S, "simb_atrib esperado");
             }
-            if (tokens.front().simb == "simb_tipo_int")
+            if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_ident")
                 obter_simbolo();
             else
             {
-                vector<string> S{"simb_to"};
-                ERRO(S, "simb_tipo_int esperado");
+                vector<string> S{"simb_to", "simb_downto"};
+                ERRO(S, "simb_tipo_int ou identificador esperado");
             }
-            if (tokens.front().simb == "simb_to")
+            if (tokens.front().simb == "simb_to" || tokens.front().simb == "simb_downto")
                 obter_simbolo();
             else
             {
-                vector<string> S{"simb_ident"};
-                ERRO(S, "simb_to esperado");
+                vector<string> S{"simb_tipo_int", "simb_ident"};
+                ERRO(S, "simb_to ou simb_downto esperado");
             }
-            if (tokens.front().simb == "simb_ident")
+            if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_ident")
                 obter_simbolo();
             else
             {
                 vector<string> S;
-                ERRO(S, "identificador esperado");
+                ERRO(S, "simb_tipo_int ou identificador esperado");
             }
             if (tokens.front().simb == "simb_do")
                 obter_simbolo();

@@ -9,7 +9,7 @@ begin
 		res:=res+i;
 		j:=j-1;
 	end;
-	for aux:=1 to x do
+	for aux:=x downto 1 do
 		begin 
 		fat:=fat*aux; 
 	end; 

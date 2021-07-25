@@ -104,16 +104,22 @@ public:
 
         if (str[i] == '.')
         {
-            number.push_back(str[i++]);
-            if (!isNumber(str[i]))
-            {
-                number.push_back(str[i]);
-                cout << "Erro léxico na linha " << linha << ": número real mal formado" << endl;
-                errors++;
-                return i;
-            }
+            i++;
             while (isNumber(str[i]))
                 number.push_back(str[i++]);
+            if (isChar(str[i]))
+            {
+                cout << "Erro léxico na linha " << linha << ": número real mal formado" << endl;
+                Token newToken;
+                newToken.simb = words["real"];
+                newToken.linha = linha;
+                tokens.push(newToken);
+                errors++;
+                while (isChar(str[i]) || isNumber(str[i]))
+                    i++;
+                i--;
+                return i;
+            }
             // str[i] n eh mais um number
             Token newToken;
             newToken.simb = words["real"];
@@ -134,6 +140,10 @@ public:
                 while (isChar(str[i]) || isNumber(str[i]))
                     i++;
                 cout << "Erro léxico na linha " << linha << ": ident mal formado" << endl;
+                Token newToken;
+                newToken.simb = "simb_ident";
+                newToken.linha = linha;
+                tokens.push(newToken);
                 errors++;
             }
         }

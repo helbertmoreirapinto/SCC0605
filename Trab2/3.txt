@@ -1,4 +1,31 @@
-program ceara
-begin >= helbert_123 if
-while #1qwer for
-avon > integer
+program p;
+const C1 = 4;
+const C2 = 3.14;
+var i1 : integer ;
+var r1 : real ;
+var i2,i3,i4 : integer ;
+var r2,r3 : real ;
+
+procedure P1 ;
+begin
+{comandos pode ser vazio}
+end;
+
+procedure P2 (a : integer);
+var r1,r2 : real ;
+begin
+{comandos pode ser vazio}
+end;
+
+procedure P3 (a,b,c : real; d,e : integer);
+var r1,r2 : real ;
+var a2 : integer aaaa ;
+begin
+{comandos pode ser vazio}
+end;
+
+begin
+read(i1);
+write(i2);
+
+end.

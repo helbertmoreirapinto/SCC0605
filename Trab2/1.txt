@@ -1,11 +1,15 @@
 program p;
-const a = 3.141;
+const a = 3.1a1;
 var x: integer;
 procedure nomep(x: real);
 begin
 	x:=1;
 	while (x<3) {teste @@_@@  if} do 
-	x:=1.54; {axde} {xas}
+	begin
+		x:=1.54; {axde} {xas}
+	end;
 	while (gabriel <3) {teste @@_@@  if} do 
+	begin
 		x:=y+1;
+	end;
 end.

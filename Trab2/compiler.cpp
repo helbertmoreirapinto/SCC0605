@@ -21,11 +21,18 @@ typedef struct
     int linha;
 } Token;
 
+typedef struct
+{
+    string erro;
+    int linha;
+} Erro;
+
 class lex_an
 {
 public:
     map<string, string> words, symbols;
     queue<Token> tokens;
+    queue<Erro> erros_queue;
     int linha = 1;
     int errors = 0;
 
@@ -109,7 +116,10 @@ public:
                 number.push_back(str[i++]);
             if (isChar(str[i]))
             {
-                cout << "Erro léxico na linha " << linha << ": número real mal formado" << endl;
+                Erro newErro;
+                newErro.erro = "número real mal formado";
+                newErro.linha = linha;
+                erros_queue.push(newErro);
                 Token newToken;
                 newToken.simb = words["real"];
                 newToken.linha = linha;
@@ -139,7 +149,10 @@ public:
             {
                 while (isChar(str[i]) || isNumber(str[i]))
                     i++;
-                cout << "Erro léxico na linha " << linha << ": ident mal formado" << endl;
+                Erro newErro;
+                newErro.erro = "ident mal formado";
+                newErro.linha = linha;
+                erros_queue.push(newErro);
                 Token newToken;
                 newToken.simb = "simb_ident";
                 newToken.linha = linha;
@@ -227,7 +240,10 @@ public:
             chain.push_back(str[i++]);
         else
         {
-            cout << "Erro léxico na linha " << linha << ": comentário mal formado" << endl;
+            Erro newErro;
+            newErro.erro = "comentário mal formado";
+            newErro.linha = linha;
+            erros_queue.push(newErro);
             errors++;
         }
         return i;
@@ -256,7 +272,10 @@ public:
                 continue;
             else
             {
-                cout << "Erro léxico na linha " << linha << ": caractere não permitido" << endl;
+                Erro newErro;
+                newErro.erro = "caractere não permitido";
+                newErro.linha = linha;
+                erros_queue.push(newErro);
                 errors++;
             }
         }
@@ -282,6 +301,7 @@ public:
     queue<Token> tokens;
     vector<string> simb_sincr{"simb_program", "simb_begin", "simb_end", "simb_const", "simb_procedure", "simb_read", "simb_write", "simb_while", "simb_if", "simb_else", "simb_do", "simb_to", "simb_igual"};
     stack<vector<string>> Seg;
+    queue<Erro> erros_queue;
     int errors = 0;
     bool panico = false;
 
@@ -299,8 +319,10 @@ public:
             return;
 
         errors++;
-        cout << "Erro sintatico na linha: " << tokens.front().linha << ", " << msg << endl;
-
+        Erro newErro;
+        newErro.erro = msg;
+        newErro.linha = tokens.front().linha;
+        erros_queue.push(newErro);
         // verifica se ainda não chegou ao fim do programa
         // verifica se token corrente nao pertence ao conjunto simb_sincr
         // verifica se tokens corrente nao pertence ao vetor de seguidores
@@ -698,7 +720,10 @@ public:
                 if (tokens.front().simb == "simb_igual")
                 {
                     errors++;
-                    cout << "Erro sintatica na linha: " << tokens.front().linha << ", comparacão não esperada" << endl;
+                    Erro newErro;
+                    newErro.erro = "comparacão não esperada";
+                    newErro.linha = tokens.front().linha;
+                    erros_queue.push(newErro);
                 }
                 obter_simbolo();
                 expressao();
@@ -991,6 +1016,60 @@ public:
     }
 };
 
+void imprimirErros(lex_an LexAn, sin_an SinAn)
+{
+    Erro msg_erro;
+    bool lex;
+    int total_errors = SinAn.errors + LexAn.errors;
+    if (total_errors > 0)
+    {
+        while (!LexAn.erros_queue.empty() || !SinAn.erros_queue.empty())
+        {
+            if (!LexAn.erros_queue.empty())
+            {
+                if (!SinAn.erros_queue.empty())
+                {
+                    if (LexAn.erros_queue.front().linha <= SinAn.erros_queue.front().linha)
+                    {
+                        msg_erro = LexAn.erros_queue.front();
+                        lex = true;
+                        LexAn.erros_queue.pop();
+                    }
+                    else
+                    {
+                        msg_erro = SinAn.erros_queue.front();
+                        lex = false;
+                        SinAn.erros_queue.pop();
+                    }
+                }
+                else
+                {
+                    msg_erro = LexAn.erros_queue.front();
+                    lex = true;
+                    LexAn.erros_queue.pop();
+                }
+            }
+            else
+            {
+                msg_erro = SinAn.erros_queue.front();
+                lex = false;
+                SinAn.erros_queue.pop();
+            }
+            if (lex)
+                cout << "Erro léxico";
+            else
+                cout << "Erro sintático";
+            cout << " na linha " << msg_erro.linha << ": " << msg_erro.erro << endl;
+        }
+    }
+
+    cout << "Quantidade total de erros encontrados: " << total_errors << endl;
+    if (total_errors == 0)
+        cout << "Compilação foi um sucesso!" << endl;
+    else
+        cout << "Falha na compilação!" << endl;
+}
+
 int main()
 {
     string fileName;
@@ -1029,12 +1108,7 @@ int main()
 
     SinAn.processaTokens();
 
-    int total_errors = SinAn.errors + LexAn.errors;
-    cout << "Quantidade total de erros encontrados: " << total_errors << endl;
-    if (total_errors == 0)
-        cout << "Compilação foi um sucesso!" << endl;
-    else
-        cout << "Falha na compilação!" << endl;
+    imprimirErros(LexAn, SinAn);
 
     return 0;
 }

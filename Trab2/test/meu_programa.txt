@@ -1,11 +1,11 @@
 program meu_programa;
-var a, 1b: integer;
+var a, b: integer;
 begin
     read(a,b);
     while (b>a do
         begin
             write(a);
+            {coemntaria
             a=a+1;
-            write();
         end;
 end.

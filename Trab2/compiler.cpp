@@ -307,7 +307,6 @@ public:
 
         while (!tokens.empty() && find(simb_sincr.begin(), simb_sincr.end(), tokens.front().simb) == simb_sincr.end())
         {
-            cout << "Consumiu token: " << tokens.front().simb << " da linha: " << tokens.front().linha << endl;
             if (!Seg.empty() && find(Seg.top().begin(), Seg.top().end(), tokens.front().simb) != Seg.top().end())
                 break;
 
@@ -998,20 +997,20 @@ int main()
     cin >> fileName;
 
     string fileNameIn = fileName;
-    //string fileNameOut = fileName;
 
     fileNameIn.append(".txt");
-    //fileNameOut.append("_out.txt");
 
-    // open files
+    // open file
 
     ifstream fileIn(fileNameIn);
-    //ofstream fileOut(fileNameOut);
 
-    if (!fileIn) // || !fileOut)
+    if (!fileIn)
     {
         cout << "file not found!\n";
+        return -1;
     }
+
+    // Criacao do analisador lexico
 
     lex_an LexAn;
 
@@ -1022,12 +1021,9 @@ int main()
         LexAn.linha++;
     }
 
-    //LexAn.imprimeTokens();
-
-    //cout << "Arquivo " << fileNameOut << " gerado com sucesso!" << endl;
-
     fileIn.close();
-    //fileOut.close();
+
+    // Comunicacao com o analisador Sintatico
 
     sin_an SinAn(LexAn.tokens);
 

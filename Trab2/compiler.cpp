@@ -397,7 +397,7 @@ public:
             // Push Primeiro tipo_var
             vector<string> S{"simb_tipo_int, simb_tipo_real"};
             Seg.push(S);
-            ERRO("simb_dp (:) esperado");
+            ERRO("símbolo ':' esperado");
         }
         tipo_var();
         mais_par();
@@ -422,7 +422,7 @@ public:
             {
                 vector<string> S{"simb_igual"};
                 Seg.push(S);
-                ERRO("simb_ident esperado");
+                ERRO("identificador esperado");
             }
             if (tokens.front().simb == "simb_igual")
                 obter_simbolo();
@@ -431,7 +431,7 @@ public:
                 // Push Primeiro numero
                 vector<string> S{"simb_tipo_int, simb_tipo_real"};
                 Seg.push(S);
-                ERRO("simb_igual esperado");
+                ERRO("símbolo de igual '=' esperado");
             }
             numero();
             if (tokens.front().simb == "simb_pv")
@@ -441,7 +441,7 @@ public:
                 // Push primeiro dc_c
                 vector<string> S{"simb_const"};
                 Seg.push(S);
-                ERRO("simb_pv esperado");
+                ERRO("símbolo ';' esperado");
             }
             dc_c();
         }
@@ -460,7 +460,7 @@ public:
                 // Push Primeiro tipo_var
                 vector<string> S{"simb_tipo_int, simb_tipo_real"};
                 Seg.push(S);
-                ERRO("simb_dp esperado");
+                ERRO("símbolo ':' esperado");
             }
             tipo_var();
             if (tokens.front().simb == "simb_pv")
@@ -470,7 +470,7 @@ public:
                 // Push Primeiro dc_v
                 vector<string> S{"simb_var"};
                 Seg.push(S);
-                ERRO("simb_pv esperado");
+                ERRO("símbolo ';' esperado");
             }
             dc_v();
         }
@@ -488,7 +488,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_fechar_parentese esperado");
+                ERRO("símbolo de fechar parêntese ')' esperado");
             }
         }
     }
@@ -509,7 +509,7 @@ public:
             // Todos estao nos simbolos de sincronizacao
             vector<string> S;
             Seg.push(S);
-            ERRO("simb_begin esperado");
+            ERRO("símbolo 'begin' esperado");
         }
         comandos();
         if (tokens.front().simb == "simb_end")
@@ -518,7 +518,7 @@ public:
         {
             vector<string> S{"simb_pv"};
             Seg.push(S);
-            ERRO("simb_end esperado");
+            ERRO("símbolo 'end' esperado");
         }
         if (tokens.front().simb == "simb_pv")
             obter_simbolo();
@@ -526,7 +526,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("simb_pv esperado");
+            ERRO("símbolo ';' esperado");
         }
     }
 
@@ -542,7 +542,7 @@ public:
                 // Push Primeiro parametros
                 vector<string> S{"simb_abrir_parentese"};
                 Seg.push(S);
-                ERRO("simb_ident esperado");
+                ERRO("identificador esperado");
             }
             parametros();
             if (tokens.front().simb == "simb_pv")
@@ -552,7 +552,7 @@ public:
                 // Push Primeiro corpo_p
                 vector<string> S{"simb_var"};
                 Seg.push(S);
-                ERRO("simb_pv esperado");
+                ERRO("símbolo ';' esperado");
             }
             corpo_p();
             dc_p();
@@ -578,7 +578,7 @@ public:
                 // Todos estao nos simbolos de sincronizacao
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_pv esperado");
+                ERRO("símbolo ';' esperado");
             }
             comandos();
         }
@@ -597,7 +597,7 @@ public:
                 // Push Primeiro variaveis
                 vector<string> S{"simb_ident"};
                 Seg.push(S);
-                ERRO("simb_abrir_parentese esperado");
+                ERRO("símbolo abrir parêntese '(' esperado");
             }
             variaveis();
             if (tokens.front().simb == "simb_fechar_parentese")
@@ -606,7 +606,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_fechar_parentese esperado");
+                ERRO("símbolo fechar parêntese ')' esperado");
             }
         }
         // while
@@ -620,7 +620,7 @@ public:
                 // Push Primeiro condicao
                 vector<string> S{"simb_soma", "simb_sub"};
                 Seg.push(S);
-                ERRO("simb_abrir_parentese esperado");
+                ERRO("símbolo abrir parêntese '(' esperado");
             }
             condicao();
             if (tokens.front().simb == "simb_fechar_parentese")
@@ -629,7 +629,7 @@ public:
             {
                 vector<string> S{"simb_do"};
                 Seg.push(S);
-                ERRO("simb_fechar_parentese esperado");
+                ERRO("símbolo fechar parêntese ')' esperado");
             }
             if (tokens.front().simb == "simb_do")
                 obter_simbolo();
@@ -651,7 +651,7 @@ public:
             {
                 vector<string> S{"simb_atrib"};
                 Seg.push(S);
-                ERRO("simb_ident esperado");
+                ERRO("identificador esperado");
             }
             if (tokens.front().simb == "simb_atrib")
                 obter_simbolo();
@@ -659,7 +659,7 @@ public:
             {
                 vector<string> S{"simb_tipo_int", "simb_ident"};
                 Seg.push(S);
-                ERRO("simb_atrib esperado");
+                ERRO("símbolo de atribuição ':=' esperado");
             }
             if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_ident")
                 obter_simbolo();
@@ -667,7 +667,7 @@ public:
             {
                 vector<string> S{"simb_to", "simb_downto"};
                 Seg.push(S);
-                ERRO("simb_tipo_int ou identificador esperado");
+                ERRO("símbolo de inteiro 'integer' ou identificador esperado");
             }
             if (tokens.front().simb == "simb_to" || tokens.front().simb == "simb_downto")
                 obter_simbolo();
@@ -675,7 +675,7 @@ public:
             {
                 vector<string> S{"simb_tipo_int", "simb_ident"};
                 Seg.push(S);
-                ERRO("simb_to ou simb_downto esperado");
+                ERRO("símbolo 'to' ou símbolo 'downto' esperado");
             }
             if (tokens.front().simb == "simb_tipo_int" || tokens.front().simb == "simb_ident")
                 obter_simbolo();
@@ -683,7 +683,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_tipo_int ou identificador esperado");
+                ERRO("símbolo de inteiro 'integer' ou identificador esperado");
             }
             if (tokens.front().simb == "simb_do")
                 obter_simbolo();
@@ -692,7 +692,7 @@ public:
                 // Push Primeiro cmd
                 vector<string> S{"simb_ident"};
                 Seg.push(S);
-                ERRO("simb_do esperado");
+                ERRO("símbolo 'do' esperado");
             }
             cmd();
         } // if
@@ -707,7 +707,7 @@ public:
                 // Push Primeiro cmd
                 vector<string> S{"simb_ident"};
                 Seg.push(S);
-                ERRO("simb_then esperado");
+                ERRO("símbolo 'then' esperado");
             }
             cmd();
             pfalsa();
@@ -738,14 +738,14 @@ public:
                 {
                     vector<string> S;
                     Seg.push(S);
-                    ERRO("simb_fechar_parentese esperado");
+                    ERRO("símbolo fechar parêntese ')' esperado");
                 }
             }
             else
             {
                 vector<string> S{"simb_pv", "simb_ident"};
                 Seg.push(S);
-                ERRO("simb_atrib ou simb_abrir_parentese esperado");
+                ERRO("símbolo de atribuição ':=' ou símbolo abrir parêntese '(' esperado");
             }
         }
         else if (tokens.front().simb == "simb_begin")
@@ -758,7 +758,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_end esperado");
+                ERRO("símbolo 'end' esperado");
             }
         }
         else
@@ -785,7 +785,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("relacao esperada");
+            ERRO("relação esperada");
         }
     }
 
@@ -809,7 +809,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("op_ad esperado");
+            ERRO("operação de aritmética (op_ad) esperada");
         }
     }
 
@@ -821,7 +821,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("op_mul esperado");
+            ERRO("operação de aritmética (op_mul) esperado");
         }
     }
 
@@ -848,7 +848,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_fechar_parentese esperado");
+                ERRO("símbolo de fechar parêntese ')' esperado");
             }
         }
         else
@@ -906,7 +906,7 @@ public:
             // Push Primeiro mais_ident
             vector<string> S{"simb_pv"};
             Seg.push(S);
-            ERRO("simb_ident esperado");
+            ERRO("identificador esperado");
         }
         mais_ident();
     }
@@ -932,7 +932,7 @@ public:
             {
                 vector<string> S;
                 Seg.push(S);
-                ERRO("simb_fechar_parentese esperado");
+                ERRO("símbolo de fechar parêntese ')' esperado");
             }
         }
     }
@@ -948,7 +948,7 @@ public:
             // Igual aos simbolos de sincronizacao
             vector<string> S;
             Seg.push(S);
-            ERRO("simb_begin esperado");
+            ERRO("símbolo 'begin' esperado");
         }
         comandos();
         if (tokens.front().simb == "simb_end")
@@ -957,7 +957,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("simb_end esperado");
+            ERRO("símbolo 'end' esperado");
         }
     }
 
@@ -969,7 +969,7 @@ public:
         {
             vector<string> S{"simb_ident"};
             Seg.push(S);
-            ERRO("simb_program esperado");
+            ERRO("símbolo 'program' esperado");
         }
         if (tokens.front().simb == "simb_ident")
             obter_simbolo();
@@ -977,7 +977,7 @@ public:
         {
             vector<string> S{"simb_pv"};
             Seg.push(S);
-            ERRO("simb_ident esperado");
+            ERRO("identificador esperado");
         }
         if (tokens.front().simb == "simb_pv")
             obter_simbolo();
@@ -986,7 +986,7 @@ public:
             // Push primeiro corpo
             vector<string> S{"simb_const", "simb_var", "simb_procedure"};
             Seg.push(S);
-            ERRO("simb_pv esperado");
+            ERRO("símbolo ';' esperado");
         }
         corpo();
         if (tokens.front().simb == "simb_dot")
@@ -995,7 +995,7 @@ public:
         {
             vector<string> S;
             Seg.push(S);
-            ERRO("simb_dot esperado");
+            ERRO("símbolo '.' esperado");
         }
     }
 

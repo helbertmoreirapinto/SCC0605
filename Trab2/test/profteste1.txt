@@ -1,0 +1,17 @@
+{programa sem nome, erro léxico no @, while sem do, falta ponto-e-vírgula, erro na atribuição}
+program ;
+var N, ant1, ant2, prox: integer;
+begin
+	read(N@);
+	ant1:=1;
+	ant2:=1;
+	write(ant1, ant2);
+	while (N>=3)
+		begin
+		prox:=ant1+ant2;
+		write(prox)
+		ant2:=ant1;
+		ant1:=prox;
+		N=N-1;
+		end;
+end.

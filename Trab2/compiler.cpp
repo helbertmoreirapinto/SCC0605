@@ -12,7 +12,7 @@ Helbert Moreira Pinto - 10716504
 #include <map>
 #include <bits/stdc++.h>
 
-#define MAX_LINE 100
+#define MAX_LINE 10000
 using namespace std;
 
 typedef struct

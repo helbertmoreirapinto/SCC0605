@@ -1,0 +1,18 @@
+{erro de tipo declarado, erro léxico de nro real, for sem atribuição, comentário não fechado, ponto final faltando}
+program fatorial;
+var x: float;
+
+	procedure fat(n: real);
+	var i: integer;
+	begin
+		fat:=3.a14;
+		for i=2 to n do
+			fat:=fat*i;	
+	end;
+
+begin
+	read(x);
+	x:=fat(x);
+	write(x);
+{comentario nao fechado...
+end
